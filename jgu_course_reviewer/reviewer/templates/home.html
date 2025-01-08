@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <h1 class="text-center my-4">Welcome to JGU Reviews</h1>
+        
+        <div class="list-group">
+            {% for review in reviews %}
+            <a href="#" class="list-group-item list-group-item-action flex-column align-items-start py-3">
+              <div class="d-flex w-100 justify-content-between">
+                <h5 class="mb-1">{{review.course_instructor_term.course.course_name}}</h5>
+                <small class="text-muted">{{review.course_instructor_term.term.term_name}}</small>
+              </div>
+              <p class="mb-1">{{review.course_instructor_term.instructor.instructor_name}}</p>
+              <div class="d-flex w-100 justify-content-between">
+                <small class="text-muted">{{review.description}}</small>
+                <small class="text-muted">Rating: {{review.rating}}</small>
+              </div>
+            </a>
+            {% empty %}
+            <li>No reviews found for the selected filters.</li>
+            {% endfor %}
+        </div>
+    </div>
+    
+{% endblock %}

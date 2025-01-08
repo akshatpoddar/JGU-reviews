@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Instructors{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center my-4">Instructors</h1>
+    
+    <div class="list-group">
+        {% for instructor in instructors %}
+        <a href="{% url 'instructor-info' instructor.id %}" class="list-group-item list-group-item-action flex-column align-items-start p2">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{instructor.instructor_name}}</h5>
+            <small class="text-muted">{{instructor.avg_rating}}</small>
+          </div>
+        </a>
+        {% empty %}
+        <p class="text-center">No instructors found for the selected filters</p>
+        {% endfor %}
+</div>
+{% endblock %}

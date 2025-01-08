@@ -1,0 +1,28 @@
+{% extends "base.html" %}
+
+{% block title %}{{instructor.instructor_name}}{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1 class="text-center my-4">Instructors</h1>
+    <h5 class="mb-1">{{instructor.instructor_name}}</h5>
+    <p class="text-muted">{{instructor.avg_rating}}</small>
+
+    <div class="list-group">
+        {% for review in reviews %}
+        <a href="#" class="list-group-item list-group-item-action flex-column align-items-start py-3">
+          <div class="d-flex w-100 justify-content-between">
+            <h5 class="mb-1">{{review.course_instructor_term.course.course_name}}</h5>
+            <small class="text-muted">{{review.course_instructor_term.term.term_name}}</small>
+          </div>
+          <div class="d-flex w-100 justify-content-between">
+            <p class="text-muted">{{review.description}}</p>
+            <small class="text-muted">Rating: {{review.rating}}</small>
+          </div>
+        </a>
+        {% empty %}
+        <li>No reviews found for the selected filters.</li>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

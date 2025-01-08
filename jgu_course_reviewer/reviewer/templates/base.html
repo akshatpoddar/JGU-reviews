@@ -1,0 +1,51 @@
+{% load bootstrap5 %}
+{% load static %}
+{# Load CSS and JavaScript #}
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>{% block title %}{% endblock %}</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="">
+    </head>
+    <body>
+        <nav class="navbar navbar-expand-lg navbar-light bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="/">
+                <img style="height: 40px;" src="{% static 'jgu_logo.png' %}" alt="Example Image">
+              </a>
+              <a class="navbar-brand" href="/">JGU Reviews</a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse align-middle" id="navbarNav">
+                <ul class="navbar-nav">
+                  <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'home' %} active {% endif %}" aria-current="page" href="/">Home</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'courses' %} active {% endif %}" href="/courses">Courses</a>
+                  </li>
+                  <li class="nav-item ">
+                    <a class="nav-link {% if request.resolver_match.url_name == 'instructors' %} active {% endif %}" href="/instructors">Instructors</a>
+                  </li>
+                  <li class="nav-item">
+                    <a href="/create-review" class="btn btn-dark btn-sm my-1 mx-2" role="button" aria-pressed="true">Post Review</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </nav>
+        <main>
+            {% block content %}
+            {% endblock %}
+        </main>
+    </body>
+</html>
