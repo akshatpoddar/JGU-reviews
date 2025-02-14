@@ -4,7 +4,9 @@
 {% block title %}Create Review{% endblock %}
 
 {% block content %}
+    
     <div class="container">
+        {{ form.media.css }}
         <h1 class="my-3">Submit a Course Review</h1>
         <form method="post">
             {% csrf_token %}
@@ -12,5 +14,6 @@
             <input type="submit" class="btn btn-dark" value="Submit">
         </form>
     </div>
-    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    {{ form.media.js }}
 {% endblock %}

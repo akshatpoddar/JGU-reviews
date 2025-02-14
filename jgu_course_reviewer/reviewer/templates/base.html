@@ -37,13 +37,40 @@
                     <a class="nav-link {% if request.resolver_match.url_name == 'instructors' %} active {% endif %}" href="/instructors">Instructors</a>
                   </li>
                   <li class="nav-item">
-                    <a href="/create-review" class="btn btn-dark btn-sm my-1 mx-2" role="button" aria-pressed="true">Post Review</a>
+                    <a href="{% url 'create_review' %}" class="btn btn-dark btn-sm my-1 mx-2" role="button" aria-pressed="true">Post Review</a>
                   </li>
+                </ul>
+                <!-- Right-aligned authentication links -->
+                <ul class="navbar-nav ms-auto">
+                  {% if user.is_authenticated %}
+                      <li class="nav-item">
+                        <a class="nav-link" href="/">{{request.user}}</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                      </li>
+                  {% else %}
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'login' %}">Login</a>
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link" href="{% url 'register' %}">Register</a>
+                      </li>
+                  {% endif %}
                 </ul>
               </div>
             </div>
           </nav>
         <main>
+          {% if messages %}
+              <div class="container mt-3">
+                  {% for message in messages %}
+                      <div class="text-center alert alert-{{ message.tags }}">
+                          {{ message }}
+                      </div>
+                  {% endfor %}
+              </div>
+          {% endif %}
             {% block content %}
             {% endblock %}
         </main>

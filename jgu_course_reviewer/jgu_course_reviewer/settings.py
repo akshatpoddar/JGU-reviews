@@ -27,13 +27,31 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/1",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    },
+    'select2': {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/2",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
+
+# Set the cache backend to select2
+SELECT2_CACHE_BACKEND = 'select2'
+
 CRISPY_TEMPLATE_PACK = 'bootstrap5'
 CRISPY_ALLOWED_TEMPLATE_PACKS = 'bootstrap5'
 
-STATIC_URL = '/static/'  # URL to access static files
-STATICFILES_DIRS = [BASE_DIR / 'static']  # Include global static directory
-
-
+STATICFILES_DIRS = [BASE_DIR / 'reviewer' / 'static']  # Include global static directory
+LOGIN_URL = '/login'
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,7 +65,10 @@ INSTALLED_APPS = [
     'bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
+    'django_select2',
 ]
+
+AUTH_USER_MODEL = "reviewer.CustomUser"
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',

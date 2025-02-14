@@ -4,7 +4,9 @@
 
 {% block content %}
 <div class="container">
-    <h1 class="text-center my-4">{{course.course_name}}</h1>
+    <h1 class="text-center my-4">Courses</h1>
+    <h5 class="mb-1">{{course.course_name}}</h5>
+    <p class="text-muted">{{course.avg_rating}}</small>
 
     <div class="list-group">
         {% for review in reviews %}

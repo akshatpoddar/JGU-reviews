@@ -8,7 +8,7 @@
         
         <div class="list-group">
             {% for course in courses %}
-            <a href="{% url 'course-info' course.id %}" class="list-group-item list-group-item-action flex-column align-items-start p2-3">
+            <a href="{% url 'course_info' course.id %}" class="list-group-item list-group-item-action flex-column align-items-start p2-3">
               <div class="d-flex w-100 justify-content-between">
                 <h5 class="mb-1">{{course.course_name}}</h5>
               </div>

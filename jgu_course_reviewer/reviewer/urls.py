@@ -1,11 +1,15 @@
 from django.urls import path, include
-from .views import home_view, courses_view, instructors_view, create_review_view, instructor_info, course_info
+from . import views
 
 urlpatterns = [
-    path('', home_view, name='home'),
-    path('courses', courses_view, name='courses'),
-    path('instructors', instructors_view, name='instructors'),
-    path('create-review', create_review_view, name='create-reviews'),
-    path('instructors/<int:id>', instructor_info, name='instructor-info'),
-    path('courses/<int:id>', course_info, name='course-info'),
+    path('', views.home_view, name='home'),
+    path('courses/', views.courses_view, name='courses'),
+    path('instructors/', views.instructors_view, name='instructors'),
+    path('instructor/<int:id>/', views.instructor_info, name='instructor_info'),
+    path('course/<int:id>/', views.course_info, name='course_info'),
+    path('review/create/', views.create_review_view, name='create_review'),
+    path('reviews/', views.review_list, name='review_list'),
+    path('register/', views.register_view, name='register'),
+    path('login/', views.login_view, name='login'),
+    path('logout/', views.logout_confirm_view, name='logout'),
 ]
