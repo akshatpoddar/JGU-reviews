@@ -108,8 +108,12 @@ WSGI_APPLICATION = 'jgu_course_reviewer.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'jgu-reviews-cluster',  # RDS database name
+        'USER': 'postgrea',      # RDS username
+        'PASSWORD': os.getenv('DB_PASSWORD'),  # RDS password
+        'HOST': 'jgu-reviews-cluster.cb062802u0vx.ap-south-1.rds.amazonaws.com',  # RDS Endpoint
+        'PORT': '5432',
     }
 }
 
