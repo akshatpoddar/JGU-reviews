@@ -13,9 +13,12 @@ https://docs.djangoproject.com/en/5.0/ref/settings/
 from pathlib import Path
 import os
 
+from dotenv import load_dotenv
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
-
+dotenv_path = os.path.join(BASE_DIR, '.env')
+load_dotenv(dotenv_path)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/
@@ -26,7 +29,7 @@ SECRET_KEY = 'django-insecure--gs#4p80kdg-+=%a$*8^fi8@h)kz3!35$+sjkyqn0$7usjk#s$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['ec2-15-206-96-233.ap-south-1.compute.amazonaws.com']
+ALLOWED_HOSTS = ['127.0.0.1']
 
 CACHES = {
     "default": {
@@ -107,13 +110,13 @@ WSGI_APPLICATION = 'jgu_course_reviewer.wsgi.application'
 # https://docs.djangoproject.com/en/5.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': 'jgu-reviews-cluster',  # RDS database name
-        'USER': 'postgrea',      # RDS username
-        'PASSWORD': os.getenv('DB_PASSWORD'),  # RDS password
-        'HOST': 'jgu-reviews-cluster.cb062802u0vx.ap-south-1.rds.amazonaws.com',  # RDS Endpoint
-        'PORT': '5432',
+    "default": {
+        "ENGINE": "django.db.backends.postgresql_psycopg2",
+        "NAME": "akshat31",
+        "USER": "akshat31",
+        "PASSWORD": "",
+        "HOST": "localhost",
+        "PORT": "",
     }
 }
 
