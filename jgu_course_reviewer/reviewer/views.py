@@ -19,13 +19,31 @@ def home_view(request):
 
 # View to list all courses
 def courses_view(request):
+    sort = request.GET.get('sort', 'name')
     courses = Course.objects.all()
-    return render(request, 'courses.html', {'courses': courses})
+    
+    if sort == 'name':
+        courses = courses.order_by('course_name')
+    elif sort == 'rating_high':
+        courses = courses.order_by('-avg_rating', 'course_name')
+    elif sort == 'rating_low':
+        courses = courses.order_by('avg_rating', 'course_name')
+    
+    return render(request, 'courses.html', {'courses': courses, 'current_sort': sort})
 
 # View to list all instructors
 def instructors_view(request):
+    sort = request.GET.get('sort', 'name')
     instructors = Instructor.objects.all()
-    return render(request, 'instructors.html', {'instructors': instructors})
+    
+    if sort == 'name':
+        instructors = instructors.order_by('instructor_name')
+    elif sort == 'rating_high':
+        instructors = instructors.order_by('-avg_rating', 'instructor_name')
+    elif sort == 'rating_low':
+        instructors = instructors.order_by('avg_rating', 'instructor_name')
+    
+    return render(request, 'instructors.html', {'instructors': instructors, 'current_sort': sort})
 
 # Detail view for a specific instructor and its reviews
 def instructor_info(request, id):
