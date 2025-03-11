@@ -12,7 +12,15 @@ class CustomUser(AbstractUser):
 class Course(models.Model):
     course_name = models.CharField(max_length=255, unique=True)
     avg_rating = models.FloatField(default=0.0)
+    
+    CORE = "core"
+    ELEC = "elective"
+    COURSE_CHOICES = (
+        (CORE, "Core"),
+        (ELEC, "Elective")
+    )
 
+    course_type = models.CharField(max_length=8, choices=COURSE_CHOICES)
     def __str__(self):
         return self.course_name
 
