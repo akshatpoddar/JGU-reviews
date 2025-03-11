@@ -1,4 +1,3 @@
-import requests
 from bs4 import BeautifulSoup
 from selenium import webdriver
 from selenium.webdriver.common.by import By
@@ -28,7 +27,7 @@ BASE_URL = "https://www.jgu.edu.in/academics"
 
 # Define seasons and years
 seasons = ['spring', 'fall']
-years = [2018, 2019, 2020, 2021, 2022, 2023, 2024]
+years = [2019, 2020, 2021, 2022, 2023, 2024]
 terms = [f"{s}{y}" for s in seasons for y in years]
 
 def extract_courses(soup):
@@ -82,38 +81,52 @@ def goto_next_page(driver):
 
 def scrape_courses_from_term(term):
     """Scrape all courses for a specific term."""
+
     season, year = term[:6].lower(), term[6:]  # Split 'spring2018' into 'spring' and '2018'
-    url = f"{BASE_URL}/{season}{year}/elective.php"
-    print(f"Scraping courses for {season} {year}...")
-    
-    try:
-        driver = webdriver.Chrome()
-        driver.get(url)
-        time.sleep(3)  # Wait for page to load
+    course_types = ['core', 'elective']
+    all_courses = []
+
+    for course_type in course_types:
+
+        url = f"{BASE_URL}/{season}{year}/{course_type}.php"
+        print(f"Scraping {course_type} courses for {season} {year}...")
         
-        # Get initial page content
-        soup = BeautifulSoup(driver.page_source, 'html5lib')
-        all_courses = extract_courses(soup)
-        
-        # Navigate through pagination
-        page_count = 1
-        while goto_next_page(driver):
-            page_count += 1
-            print(f"Processing page {page_count} for {season} {year}")
-            soup = BeautifulSoup(driver.page_source, 'html5lib')
-            courses = extract_courses(soup)
-            all_courses.extend(courses)
-        
-        print(f"Scraped {len(all_courses)} courses from {season} {year}")
-        driver.quit()
-        return all_courses, season, year
-    except Exception as e:
-        print(f"Error scraping {season} {year}: {e}")
         try:
-            driver.quit()
-        except:
-            pass
-        return [], season, year
+            driver = webdriver.Chrome()
+            driver.get(url)
+            time.sleep(3)  # Wait for page to load
+            
+            # Get initial page content
+            page_count = 1
+            soup = BeautifulSoup(driver.page_source, 'html5lib')
+            print(f"Processing page {page_count} for {season} {year}")
+            extracted_courses = extract_courses(soup)
+
+            for course_name, instructor_name in extracted_courses:
+                all_courses.append((course_name, instructor_name, course_type))
+            
+            # Navigate through pagination
+            while goto_next_page(driver):
+                page_count += 1
+                print(f"Processing page {page_count} for {season} {year}")
+                soup = BeautifulSoup(driver.page_source, 'html5lib')
+                extracted_courses = extract_courses(soup)
+
+                for course_name, instructor_name in extracted_courses:
+                    all_courses.append((course_name, instructor_name, course_type))
+
+            print(f"Scraped {len(all_courses)} {course_type} courses from {season} {year}")
+        except Exception as e:
+            print(f"Error scraping {season} {year}: {e}")
+            try:
+                driver.quit()
+            except:
+                pass
+            return [], season, year
+        
+    print(f"Scraped {len(all_courses)} courses from {season} {year}")
+    driver.quit()
+    return all_courses, season, year
 
 def save_to_database(courses_data, season, year):
     """Save scraped data to Django database."""
@@ -139,9 +152,18 @@ def save_to_database(courses_data, season, year):
                 print(f"Created new term: {term}")
             
             # Process each course-instructor pair
-            for course_name, instructor_name in courses_data:
+            for course_name, instructor_name, course_type in courses_data:
                 # Create or get Course
-                course, course_created = Course.objects.get_or_create(course_name=course_name)
+                course, course_created = Course.objects.get_or_create(
+                    course_name=course_name,
+                    defaults={'course_type': course_type}  # Set course type when creating
+                )
+
+                # If course exists but doesn't have a type, update it
+                if not course.course_type:
+                    course.course_type = course_type
+                    course.save()
+                
                 if course_created:
                     courses_created += 1
                     
