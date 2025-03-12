@@ -92,9 +92,12 @@ def scrape_courses_from_term(term):
         print(f"Scraping {course_type} courses for {term}...")
         
         try:
-            chrome_options = Options()
-            chrome_options.add_argument("--headless=new") 
-            driver = webdriver.Chrome(options=chrome_options)
+            options = Options()
+            options.add_argument("--no-sandbox")
+            options.add_argument("--disable-dev-shm-usage")
+            options.add_argument("--headless")  # Run in headless mode (important for servers)
+            options.add_argument("--user-data-dir=/tmp/selenium_user_data")
+            driver = webdriver.Chrome(options=options)
             driver.get(url)
             time.sleep(3)  # Wait for page to load
             
