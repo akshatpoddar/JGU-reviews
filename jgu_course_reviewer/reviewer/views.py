@@ -1,11 +1,27 @@
 from django.db import IntegrityError
 from django.shortcuts import render, get_object_or_404, redirect
 from django.contrib.auth import login, logout
+from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib import messages
-from django.contrib.auth.decorators import login_required
-from .models import Review, Course, Instructor
-from .forms import ReviewForm, ReviewFilterForm, CustomUserCreationForm
+from django.core.management import call_command
+from .models import Review, Course, Instructor, CustomUser
+from .forms import ReviewForm, ReviewFilterForm, CustomUserCreationForm, ScraperForm
+
+@staff_member_required  # Ensures only admin users can access the view
+def run_scraper_view(request):
+    if request.method == "POST":
+            form = ScraperForm(request.POST)
+            if form.is_valid():
+                term = form.cleaned_data["term"]
+                try:
+                    call_command("scrape_data", term)
+                    messages.success(request, f"Scraper executed successfully for {term}!")
+                except Exception as e:
+                    messages.error(request, f"Error running scraper: {e}")
+            return redirect("admin:index")
+    form = ScraperForm()
+    return render(request, "admin/run_scraper.html", {"form": form})
 
 # Home view displaying reviews with filtering
 def home_view(request):
@@ -16,6 +32,16 @@ def home_view(request):
     )
     form = ReviewFilterForm(request.GET or None)
     return render(request, 'home.html', {'reviews': reviews, 'form': form})
+
+def profile_view_me(request):
+    reviews = Review.objects.filter(author=request.user)
+    return render(request, 'user_profile.html', {'user': request.user, 'reviews': reviews})
+
+def profile_view(request, id):
+    user = CustomUser.objects.get(id=id)
+    reviews = Review.objects.filter(author=user)
+    return render(request, 'user_profile.html', {'user': user, 'reviews': reviews})
+
 
 # View to list all courses
 def courses_view(request):

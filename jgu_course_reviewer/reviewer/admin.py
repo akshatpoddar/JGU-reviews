@@ -4,6 +4,7 @@ from .models import Course, Instructor, Term, CourseInstructorTerm, Review
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 
+
 class CustomUserAdmin(UserAdmin):
     add_form = CustomUserCreationForm
     form = CustomUserChangeForm
@@ -11,7 +12,7 @@ class CustomUserAdmin(UserAdmin):
     list_display = ["email", "username",]
 
 admin.site.register(CustomUser, CustomUserAdmin)
-
+admin.site.index_template = 'custom_admin_index.html'
 
 @admin.register(Course)
 class CourseAdmin(admin.ModelAdmin):

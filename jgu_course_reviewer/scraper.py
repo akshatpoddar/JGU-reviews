@@ -4,6 +4,7 @@ from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.chrome.options import Options
 import time
 import os
 import django
@@ -81,25 +82,26 @@ def goto_next_page(driver):
 
 def scrape_courses_from_term(term):
     """Scrape all courses for a specific term."""
-
-    season, year = term[:6].lower(), term[6:]  # Split 'spring2018' into 'spring' and '2018'
     course_types = ['core', 'elective']
+    course_url = {'core': 'corecourse', 'elective': 'elective'}
     all_courses = []
 
     for course_type in course_types:
 
-        url = f"{BASE_URL}/{season}{year}/{course_type}.php"
-        print(f"Scraping {course_type} courses for {season} {year}...")
+        url = f"{BASE_URL}/{term}/{course_url[course_type]}.php"
+        print(f"Scraping {course_type} courses for {term}...")
         
         try:
-            driver = webdriver.Chrome()
+            chrome_options = Options()
+            chrome_options.add_argument("--headless=new") 
+            driver = webdriver.Chrome(options=chrome_options)
             driver.get(url)
             time.sleep(3)  # Wait for page to load
             
             # Get initial page content
             page_count = 1
             soup = BeautifulSoup(driver.page_source, 'html5lib')
-            print(f"Processing page {page_count} for {season} {year}")
+            print(f"Processing page {page_count} for {term}")
             extracted_courses = extract_courses(soup)
 
             for course_name, instructor_name in extracted_courses:
@@ -108,32 +110,38 @@ def scrape_courses_from_term(term):
             # Navigate through pagination
             while goto_next_page(driver):
                 page_count += 1
-                print(f"Processing page {page_count} for {season} {year}")
+                print(f"Processing page {page_count} for {term}")
                 soup = BeautifulSoup(driver.page_source, 'html5lib')
                 extracted_courses = extract_courses(soup)
 
                 for course_name, instructor_name in extracted_courses:
                     all_courses.append((course_name, instructor_name, course_type))
 
-            print(f"Scraped {len(all_courses)} {course_type} courses from {season} {year}")
+            print(f"Scraped {len(all_courses)} {course_type} courses from {term}")
+
         except Exception as e:
-            print(f"Error scraping {season} {year}: {e}")
+            print(f"Error scraping {term}: {e}")
             try:
                 driver.quit()
             except:
                 pass
-            return [], season, year
+            return [], term
         
-    print(f"Scraped {len(all_courses)} courses from {season} {year}")
+    print(f"Scraped {len(all_courses)} courses from {term}")
     driver.quit()
-    return all_courses, season, year
+    return all_courses, term
 
-def save_to_database(courses_data, season, year):
+def save_to_database(courses_data, term):
     """Save scraped data to Django database."""
     # Use database transaction for better performance and consistency
     from django.db import transaction
     
     # Convert season to proper case for the model
+    for (i,c) in enumerate(term):
+        if c.isDigit():
+            break
+    season = term[:i]
+    year = term[i:]
     season_proper = season.capitalize()
     
     # Counter for statistics
@@ -193,6 +201,7 @@ def save_to_database(courses_data, season, year):
         print(f"Error saving data for {season} {year}: {e}")
         return 0, 0, 0
 
+
 def main():
     """Main function to scrape all terms and save data."""
     print("Starting JGU course scraper...")
@@ -210,9 +219,9 @@ def main():
     
     # Process each term
     for term in terms:
-        courses, season, year = scrape_courses_from_term(term)
+        courses, term = scrape_courses_from_term(term)
         if courses:
-            save_to_database(courses, season, year)
+            save_to_database(courses, term)
     
     # Final counts for comparison
     final_course_count = Course.objects.count()

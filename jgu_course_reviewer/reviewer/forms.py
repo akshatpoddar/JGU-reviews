@@ -47,6 +47,10 @@ class InstructorWidget(ModelSelect2Widget):
         attrs = super().build_attrs(base_attrs, extra_attrs)
         attrs['data-minimum-input-length'] = 0  # Allow search with 0 characters typed
         return attrs
+    
+
+class ScraperForm(forms.Form):
+    term = forms.CharField(label="Enter Term", max_length=10, help_text="E.g., spring2024")
 
 class CustomUserCreationForm(UserCreationForm):
     class Meta:

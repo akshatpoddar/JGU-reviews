@@ -12,4 +12,7 @@ urlpatterns = [
     path('register/', views.register_view, name='register'),
     path('login/', views.login_view, name='login'),
     path('logout/', views.logout_confirm_view, name='logout'),
+    path('run-scraper/', views.run_scraper_view, name='run_scraper'),
+    path('user/me', views.profile_view_me, name='profile'),
+    path('user/<int:id>', views.profile_view, name='profile'),
 ]

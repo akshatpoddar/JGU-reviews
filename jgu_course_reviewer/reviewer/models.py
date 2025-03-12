@@ -3,7 +3,7 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 from django.contrib.auth.models import AbstractUser
 
 class CustomUser(AbstractUser):
-    pass 
+    email = models.EmailField(blank=False)
 
     def __str__(self):
         return self.username

@@ -1,0 +1,25 @@
+{% extends "admin/base_site.html" %}
+{% block content %}
+    <h1>Run Scraper</h1>
+    <form id="scraper-form" method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button id="run-scraper-btn" type="submit" class="button">Run Scraper</button>
+        <span id="loading" style="display:none;">
+            <img src="https://i.gifer.com/4V0b.gif" width="30px"/> Fetching courses...
+        </span>
+    </form>
+
+    <br>
+    <a href="{% url 'admin:index' %}">Back to Dashboard</a>
+
+    <script>
+        document.getElementById("scraper-form").addEventListener("submit", function() {
+            // Disable the button
+            document.getElementById("run-scraper-btn").style.display = "none";
+            
+            // Show loading animation
+            document.getElementById("loading").style.display = "inline";
+        });
+    </script>
+{% endblock %}
