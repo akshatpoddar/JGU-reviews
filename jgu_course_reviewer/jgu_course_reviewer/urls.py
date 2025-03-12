@@ -21,5 +21,4 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('reviewer.urls')),
     path('select2/', include('django_select2.urls')),
-    path('ratings/', include('star_ratings.urls', namespace='ratings')),
 ]
