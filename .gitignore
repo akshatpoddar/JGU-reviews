@@ -6,6 +6,10 @@ __pycache__/
 # C extensions
 *.so
 
+# Ignore all migration files except __init__.py
+**/migrations/*.py
+!**/migrations/__init__.py
+
 # Distribution / packaging
 .Python
 build/
@@ -120,13 +124,6 @@ ipython_config.py
 # PEP 582; used by e.g. github.com/David-OConnor/pyflow and github.com/pdm-project/pdm
 __pypackages__/
 
-# Celery stuff
-celerybeat-schedule
-celerybeat.pid
-
-# SageMath parsed files
-*.sage.py
-
 # Environments
 .env
 .venv
@@ -135,13 +132,6 @@ venv/
 ENV/
 env.bak/
 venv.bak/
-
-# Spyder project settings
-.spyderproject
-.spyproject
-
-# Rope project settings
-.ropeproject
 
 # mkdocs documentation
 /site
