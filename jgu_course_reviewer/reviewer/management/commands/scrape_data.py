@@ -12,9 +12,9 @@ class Command(BaseCommand):
         term = options["term"]
 
         # Call scraper for the given term
-        courses, season, year = scrape_courses_from_term(term)
+        courses, term = scrape_courses_from_term(term)
         if courses:
-            save_to_database(courses, season, year)
+            save_to_database(courses, term)
             self.stdout.write(self.style.SUCCESS(f"Scraping complete for {term}. Data saved to database."))
         else:
             self.stdout.write(self.style.WARNING(f"No courses found for {term}."))
