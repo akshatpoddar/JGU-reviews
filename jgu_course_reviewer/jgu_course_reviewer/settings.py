@@ -29,12 +29,12 @@ SECRET_KEY = 'django-insecure--gs#4p80kdg-+=%a$*8^fi8@h)kz3!35$+sjkyqn0$7usjk#s$
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
 
 CACHES = {
     "default": {
         "BACKEND": "django_redis.cache.RedisCache",
-        "LOCATION": "redis://127.0.0.1:6379/1",
+        "LOCATION": "redis://127.0.0.1:6379/1d",
         "OPTIONS": {
             "CLIENT_CLASS": "django_redis.client.DefaultClient",
         }
@@ -66,7 +66,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'reviewer',
-    'bootstrap5',
+    'django_bootstrap5',
     'crispy_forms',
     'crispy_bootstrap5',
     'django_select2',
