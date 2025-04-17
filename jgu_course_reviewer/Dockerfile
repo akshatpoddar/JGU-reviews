@@ -1,5 +1,5 @@
-# Use the official Python runtime image
-FROM python:3.13  
+# Stage 1: build stage
+FROM python:3.13-slim
  
 # Create the app directory
 RUN mkdir /app
@@ -9,13 +9,12 @@ WORKDIR /app
  
 # Prevents Python from writing pyc files to disk
 ENV PYTHONDONTWRITEBYTECODE=1
-#Prevents Python from buffering stdout and stderr
+# Prevents Python from buffering stdout and stderr
 ENV PYTHONUNBUFFERED=1 
  
 # Copy the Django project  and install dependencies
+RUN pip install --upgrade pip
 COPY requirements.txt  /app/
- 
-RUN pip install --upgrade pip 
 RUN pip install --no-cache-dir -r requirements.txt
  
 # Copy the Django project to the container
@@ -23,7 +22,8 @@ COPY . /app/
  
 # Expose the Django port
 EXPOSE 8080
+
+RUN chmod +x /app/entrypoint.prod.sh
  
 # Run Django’s development server
-# CMD ["gunicorn", "jgu_course_reviewier.wsgi:app", "--host", "0.0.0.0", "--port", "8080"]
-CMD ["python", "manage.py", "runserver", "0.0.0.0:8080"]
+CMD ["/app/entrypoint.prod.sh"]
