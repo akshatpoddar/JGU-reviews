@@ -146,8 +146,8 @@ def save_to_database(courses_data, term):
     for (i,c) in enumerate(term):
         if c.isdigit():
             break
-    season = term[:i+1]
-    year = term[i+1:]
+    season = term[:i]
+    year = term[i:]
     season_proper = season.capitalize()
     
     print(f"Saving courses for {season_proper} {year}")
