@@ -96,7 +96,7 @@ def scrape_courses_from_term(term):
             options.add_argument("--no-sandbox")
             options.add_argument("--disable-dev-shm-usage")
             options.add_argument("--headless")  # Run in headless mode (important for servers)
-            options.add_argument("--user-data-dir=/tmp/selenium_user_data")
+            
             driver = webdriver.Chrome(options=options)
             driver.get(url)
             time.sleep(3)  # Wait for page to load
@@ -121,6 +121,7 @@ def scrape_courses_from_term(term):
                     all_courses.append((course_name, instructor_name, course_type))
 
             print(f"Scraped {len(all_courses)} {course_type} courses from {term}")
+            driver.quit()
 
         except Exception as e:
             print(f"Error scraping {term}: {e}")
@@ -131,7 +132,6 @@ def scrape_courses_from_term(term):
             return [], term
         
     print(f"Scraped {len(all_courses)} courses from {term}")
-    driver.quit()
     return all_courses, term
 
 def save_to_database(courses_data, term):
