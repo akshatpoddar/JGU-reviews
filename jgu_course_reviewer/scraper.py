@@ -142,6 +142,7 @@ def save_to_database(courses_data, term):
     print("Starting to save data to db...")
 
     # Convert season to proper case for the model
+    print(f"Course data for {term} is being processed")
     for (i,c) in enumerate(term):
         if c.isDigit():
             break
@@ -227,7 +228,7 @@ def main():
     
     # Process each term
     for term in terms:
-        courses, term = scrape_courses_from_term(term)
+        courses, _term = scrape_courses_from_term(term)
         if courses:
             save_to_database(courses, term)
     
