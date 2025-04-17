@@ -6,6 +6,14 @@ RUN mkdir /app
  
 # Set the working directory inside the container
 WORKDIR /app
+
+# Install system dependencies
+RUN apt-get update && apt-get install -y wget gnupg unzip
+
+# Install Google Chrome
+RUN wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+RUN apt install -y ./google-chrome-stable_current_amd64.deb
+RUN rm google-chrome-stable_current_amd64.deb
  
 # Prevents Python from writing pyc files to disk
 ENV PYTHONDONTWRITEBYTECODE=1
