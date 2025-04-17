@@ -1,5 +1,6 @@
 services:
   web:
+    build: .
     container_name: jgu-django-prod
     restart: always
     expose:
