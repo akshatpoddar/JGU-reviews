@@ -17,7 +17,7 @@ services:
     ports:
       - "80:80"
     volumes:
-      - ./nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+      - ./nginx/nginx.conf:/etc/nginx/conf.d/jgu_reviews.conf
       - ./static:/static
     depends_on:
       - web
