@@ -1,6 +1,5 @@
 services:
   web:
-    image: jgu-course-reviewer:latest  # Built and pushed to registry, or built locally
     container_name: jgu-django-prod
     restart: always
     expose:
