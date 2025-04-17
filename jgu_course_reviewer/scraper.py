@@ -144,10 +144,10 @@ def save_to_database(courses_data, term):
     # Convert season to proper case for the model
     print(f"Course data for {term} is being processed")
     for (i,c) in enumerate(term):
-        if c.isDigit():
+        if c.isdigit():
             break
-    season = term[:i]
-    year = term[i:]
+    season = term[:i+1]
+    year = term[i+1:]
     season_proper = season.capitalize()
     
     print(f"Saving courses for {season_proper} {year}")
