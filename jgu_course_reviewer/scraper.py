@@ -139,6 +139,8 @@ def save_to_database(courses_data, term):
     # Use database transaction for better performance and consistency
     from django.db import transaction
     
+    print("Saving course data to db...")
+
     # Convert season to proper case for the model
     for (i,c) in enumerate(term):
         if c.isDigit():
