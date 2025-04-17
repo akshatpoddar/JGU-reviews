@@ -138,8 +138,8 @@ def save_to_database(courses_data, term):
     """Save scraped data to Django database."""
     # Use database transaction for better performance and consistency
     from django.db import transaction
-    
-    print("Saving course data to db...")
+
+    print("Starting to save data to db...")
 
     # Convert season to proper case for the model
     for (i,c) in enumerate(term):
@@ -149,6 +149,8 @@ def save_to_database(courses_data, term):
     year = term[i:]
     season_proper = season.capitalize()
     
+    print(f"Saving courses for {season_proper} {year}")
+
     # Counter for statistics
     courses_created = 0
     instructors_created = 0
@@ -157,6 +159,7 @@ def save_to_database(courses_data, term):
     try:
         with transaction.atomic():
             # Get or create the Term
+            print("Transaction started...")
             term, created = Term.objects.get_or_create(
                 term_season=season_proper,
                 term_year=int(year)
