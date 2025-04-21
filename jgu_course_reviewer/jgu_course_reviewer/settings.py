@@ -33,7 +33,7 @@ SECRET_KEY = 'django-insecure--gs#4p80kdg-+=%a$*8^fi8@h)kz3!35$+sjkyqn0$7usjk#s$
 DEBUG = os.getenv("DEBUG")
 REDIS_HOST = os.getenv("REDIS_HOST", "127.0.0.1")
 
-ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1,localhost").split(",")
+ALLOWED_HOSTS = os.getenv("DJANGO_ALLOWED_HOSTS", "127.0.0.1, localhost").split(",")
 
 CACHES = {
     "default": {

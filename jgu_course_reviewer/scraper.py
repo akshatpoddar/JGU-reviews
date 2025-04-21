@@ -49,7 +49,12 @@ def extract_courses(soup):
         cols = row.find_all('td')
         if len(cols) >= 2:
             course_name = cols[0].get_text(strip=True)
+
+            instructor_cell_html = str(cols[1])
+            print(f"Instructor Cell HTML: {instructor_cell_html}")
+            
             instructor = cols[1].get_text(strip=True)
+            print(f"Extracted course: {course_name}, instructor: {instructor}")
             
             # Skip empty values and headers
             if not course_name or not instructor or course_name == 'Course Title' or instructor == 'Instructor':
